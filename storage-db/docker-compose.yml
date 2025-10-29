@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo/mongod.conf:/etc/mongod.conf
+      - ./mongo/data:/data/db
+      - ./mongo/logs:/var/log/mongodb
+      - ./mongo/mongodb-keyfile:/etc/mongodb-keyfile
+    command:
+      - bash
+      - -c
+      - |
+        chmod 400 /etc/mongodb-keyfile
+        chown 999:999 /etc/mongodb-keyfile
+        exec mongod --config /etc/mongod.conf
+    healthcheck:
+      test: ["CMD", "mongosh", "-u", "admin", "-p", "admin", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/data:/data
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
