@@ -1,6 +1,7 @@
 # 数据目录 - 不跟踪数据库数据文件
 **/data/
 **/data/*
+speedtest/config/*
 
 # 日志目录 - 不跟踪日志文件
 **/logs/
