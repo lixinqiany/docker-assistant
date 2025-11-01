@@ -19,11 +19,6 @@ services:
         chmod 400 /etc/mongodb-keyfile
         chown 999:999 /etc/mongodb-keyfile
         exec mongod --config /etc/mongod.conf
-    healthcheck:
-      test: ["CMD", "mongosh", "-u", "admin", "-p", "admin", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - app-network
 
