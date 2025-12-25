@@ -41,7 +41,43 @@ services:
     networks:
       - redis-net
 
+  redis-sentinel-1:
+    image: redis:7.0
+    container_name: redis-sentinel-1
+    command: redis-sentinel /etc/redis/sentinel-1.conf
+    ports:
+      - "26379:26379"
+    volumes:
+      - ./conf:/etc/redis
+    depends_on:
+      - redis-master
+      - redis-slave-1
+      - redis-slave-2
+    networks:
+      - redis-net
+
+  redis-sentinel-2:
+    image: redis:7.0
+    container_name: redis-sentinel-2
+    command: redis-sentinel /etc/redis/sentinel-2.conf
+    ports:
+      - "26380:26379"
+    volumes:
+      - ./conf:/etc/redis
+    networks:
+      - redis-net
+
+  redis-sentinel-3:
+    image: redis:7.0
+    container_name: redis-sentinel-3
+    command: redis-sentinel /etc/redis/sentinel-3.conf
+    ports:
+      - "26381:26379"
+    volumes:
+      - ./conf:/etc/redis
+    networks:
+      - redis-net
+
 networks:
   redis-net:
     driver: bridge
-
