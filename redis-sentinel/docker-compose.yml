@@ -20,7 +20,7 @@ services:
     ports:
       - "6381:6379"
     volumes:
-      - ./conf/slave.conf:/etc/redis/redis.conf
+      - ./conf/slave-1.conf:/etc/redis/redis.conf
       - ./data/slave1:/data
     depends_on:
       - redis-master
@@ -34,7 +34,7 @@ services:
     ports:
       - "6382:6379"
     volumes:
-      - ./conf/slave.conf:/etc/redis/redis.conf
+      - ./conf/slave-2.conf:/etc/redis/redis.conf
       - ./data/slave2:/data
     depends_on:
       - redis-master
