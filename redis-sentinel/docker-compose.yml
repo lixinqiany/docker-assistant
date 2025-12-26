@@ -6,6 +6,7 @@ services:
     ports:
       - "6380:6379"
     volumes:
+      - ./conf:/usr/local/etc/redis/conf
       - ./conf/redis-master.conf:/usr/local/etc/redis/redis.conf
     # 添加 host.docker.internal 映射，确保容器内能解析该域名到宿主机网关
     extra_hosts:
@@ -18,6 +19,7 @@ services:
     ports:
       - "6381:6379"
     volumes:
+      - ./conf:/usr/local/etc/redis/conf
       - ./conf/redis-slave-1.conf:/usr/local/etc/redis/redis.conf
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -31,6 +33,7 @@ services:
     ports:
       - "6382:6379"
     volumes:
+      - ./conf:/usr/local/etc/redis/conf
       - ./conf/redis-slave-2.conf:/usr/local/etc/redis/redis.conf
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -40,11 +43,11 @@ services:
   sentinel-1:
     image: redis:7.0
     container_name: sentinel-1
-    command: ["redis-sentinel", "/usr/local/etc/redis/sentinel.conf"]
+    command: ["redis-sentinel", "/usr/local/etc/redis/conf/sentinel-1.conf"]
     ports:
       - "23680:26379"
     volumes:
-      - ./conf/sentinel-1.conf:/usr/local/etc/redis/sentinel.conf
+      - ./conf:/usr/local/etc/redis/conf
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -55,11 +58,11 @@ services:
   sentinel-2:
     image: redis:7.0
     container_name: sentinel-2
-    command: ["redis-sentinel", "/usr/local/etc/redis/sentinel.conf"]
+    command: ["redis-sentinel", "/usr/local/etc/redis/conf/sentinel-2.conf"]
     ports:
       - "23681:26379"
     volumes:
-      - ./conf/sentinel-2.conf:/usr/local/etc/redis/sentinel.conf
+      - ./conf:/usr/local/etc/redis/conf
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -68,11 +71,11 @@ services:
   sentinel-3:
     image: redis:7.0
     container_name: sentinel-3
-    command: ["redis-sentinel", "/usr/local/etc/redis/sentinel.conf"]
+    command: ["redis-sentinel", "/usr/local/etc/redis/conf/sentinel-3.conf"]
     ports:
       - "23682:26379"
     volumes:
-      - ./conf/sentinel-3.conf:/usr/local/etc/redis/sentinel.conf
+      - ./conf:/usr/local/etc/redis/conf
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
