@@ -1,65 +1,80 @@
-version: '3.8'
-
 services:
   redis-master:
     image: redis:7.0
     container_name: redis-master
-    network_mode: host
-    command: redis-server /etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6380:6379"
     volumes:
-      - ./conf/master.conf:/etc/redis/redis.conf
-      - ./data/master:/data
+      - ./conf/redis-master.conf:/usr/local/etc/redis/redis.conf
+    # 添加 host.docker.internal 映射，确保容器内能解析该域名到宿主机网关
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   redis-slave-1:
     image: redis:7.0
     container_name: redis-slave-1
-    network_mode: host
-    command: redis-server /etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6381:6379"
     volumes:
-      - ./conf/slave-1.conf:/etc/redis/redis.conf
-      - ./data/slave1:/data
+      - ./conf/redis-slave-1.conf:/usr/local/etc/redis/redis.conf
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - redis-master
 
   redis-slave-2:
     image: redis:7.0
     container_name: redis-slave-2
-    network_mode: host
-    command: redis-server /etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6382:6379"
     volumes:
-      - ./conf/slave-2.conf:/etc/redis/redis.conf
-      - ./data/slave2:/data
+      - ./conf/redis-slave-2.conf:/usr/local/etc/redis/redis.conf
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - redis-master
 
-  redis-sentinel-1:
+  sentinel-1:
     image: redis:7.0
-    container_name: redis-sentinel-1
-    network_mode: host
-    command: redis-sentinel /etc/redis/sentinel-1.conf
+    container_name: sentinel-1
+    command: ["redis-sentinel", "/usr/local/etc/redis/sentinel.conf"]
+    ports:
+      - "23680:26379"
     volumes:
-      - ./conf:/etc/redis
+      - ./conf/sentinel-1.conf:/usr/local/etc/redis/sentinel.conf
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - redis-master
       - redis-slave-1
       - redis-slave-2
 
-  redis-sentinel-2:
+  sentinel-2:
     image: redis:7.0
-    container_name: redis-sentinel-2
-    network_mode: host
-    command: redis-sentinel /etc/redis/sentinel-2.conf
+    container_name: sentinel-2
+    command: ["redis-sentinel", "/usr/local/etc/redis/sentinel.conf"]
+    ports:
+      - "23681:26379"
     volumes:
-      - ./conf:/etc/redis
+      - ./conf/sentinel-2.conf:/usr/local/etc/redis/sentinel.conf
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - redis-master
 
-  redis-sentinel-3:
+  sentinel-3:
     image: redis:7.0
-    container_name: redis-sentinel-3
-    network_mode: host
-    command: redis-sentinel /etc/redis/sentinel-3.conf
+    container_name: sentinel-3
+    command: ["redis-sentinel", "/usr/local/etc/redis/sentinel.conf"]
+    ports:
+      - "23682:26379"
     volumes:
-      - ./conf:/etc/redis
+      - ./conf/sentinel-3.conf:/usr/local/etc/redis/sentinel.conf
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - redis-master
+
