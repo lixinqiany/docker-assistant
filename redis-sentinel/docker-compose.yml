@@ -1,6 +1,6 @@
 services:
   redis-master:
-    image: redis:7.0
+    image: redis:7.4
     container_name: redis-master
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     ports:
@@ -13,7 +13,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   redis-slave-1:
-    image: redis:7.0
+    image: redis:7.4
     container_name: redis-slave-1
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     ports:
@@ -27,7 +27,7 @@ services:
       - redis-master
 
   redis-slave-2:
-    image: redis:7.0
+    image: redis:7.4
     container_name: redis-slave-2
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     ports:
@@ -41,7 +41,7 @@ services:
       - redis-master
 
   sentinel-1:
-    image: redis:7.0
+    image: redis:7.4
     container_name: sentinel-1
     command: ["redis-sentinel", "/usr/local/etc/redis/conf/sentinel-1.conf"]
     ports:
@@ -56,7 +56,7 @@ services:
       - redis-slave-2
 
   sentinel-2:
-    image: redis:7.0
+    image: redis:7.4
     container_name: sentinel-2
     command: ["redis-sentinel", "/usr/local/etc/redis/conf/sentinel-2.conf"]
     ports:
@@ -69,7 +69,7 @@ services:
       - redis-master
 
   sentinel-3:
-    image: redis:7.0
+    image: redis:7.4
     container_name: sentinel-3
     command: ["redis-sentinel", "/usr/local/etc/redis/conf/sentinel-3.conf"]
     ports:
